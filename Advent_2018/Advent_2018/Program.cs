@@ -13,8 +13,10 @@ namespace Advent_2018
 
         static void Main(string[] args)
         {
-            Console.WriteLine($"Day 1 - Part 1: {Day1.Day1Part1()}");
-            Console.WriteLine($"Day 1 - Part 2: {Day1.Day1Part2()}");
+            //Console.WriteLine($"Day 1 - Part 1: {Day1.Day1Part1()}");
+            //Console.WriteLine($"Day 1 - Part 2: {Day1.Day1Part2()}");
+            Console.WriteLine($"Day 2 - Part 1: {Day2.Day2Part1()}");
+            Console.WriteLine($"Day 2 - Part 2: {Day2.Day2Part2()}");
         }
     }
 }
