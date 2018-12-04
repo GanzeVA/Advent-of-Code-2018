@@ -11,6 +11,43 @@ namespace Advent_2018
     {
         static public int Day4Part1()
         {
+            Dictionary<int, int[]> guards = Day4Common();
+            int sleepyGuardId = guards.Keys.ToList()[0];
+            foreach (KeyValuePair<int, int[]> guardData in guards)
+            {
+                if (guardData.Value[60] > guards[sleepyGuardId][60])
+                    sleepyGuardId = guardData.Key;
+            }
+            int sleepyMinute = 0;
+            for (int i = 1; i < 60; i++)
+            {
+                if (guards[sleepyGuardId][i] > guards[sleepyGuardId][sleepyMinute])
+                    sleepyMinute = i;
+            }
+            return sleepyGuardId * sleepyMinute;
+        }
+
+        static public int Day4Part2()
+        {
+            Dictionary<int, int[]> guards = Day4Common();
+            int sleepyGuardId = guards.Keys.ToList()[0];
+            int sleepyMinute = 0;
+            foreach (KeyValuePair<int, int[]> guardData in guards)
+            {
+                for (int i = 0; i < 60; i++)
+                {
+                    if (guardData.Value[i] > guards[sleepyGuardId][sleepyMinute])
+                    {
+                        sleepyGuardId = guardData.Key;
+                        sleepyMinute = i;
+                    }
+                }
+            }
+            return sleepyGuardId * sleepyMinute;
+        }
+
+        static private Dictionary<int, int[]> Day4Common()
+        {
             StreamReader sr = new StreamReader(Program.filesPath + @"\day4.txt");
             List<Info> infos = new List<Info>();
             while (!sr.EndOfStream)
@@ -18,16 +55,31 @@ namespace Advent_2018
                 infos.Add(new Info(sr.ReadLine()));
             }
             infos.Sort();
+            Dictionary<int, int[]> guards = new Dictionary<int, int[]>();
+            int currentGuard = 0;
+            int fallAsleep = 0;
             for (int i = 0; i < infos.Count; i++)
             {
-
+                switch (infos[i].InfoType)
+                {
+                    case InfoType.beginsShift:
+                        currentGuard = infos[i].GuardId;
+                        if (!guards.ContainsKey(currentGuard))
+                            guards.Add(currentGuard, new int[61]);
+                        break;
+                    case InfoType.fallsAsleep:
+                        fallAsleep = infos[i].Date.Minute;
+                        break;
+                    case InfoType.wakesUp:
+                        for (int j = fallAsleep; j < infos[i].Date.Minute; j++)
+                        {
+                            guards[currentGuard][j]++;
+                        }
+                        guards[currentGuard][60] += infos[i].Date.Minute - fallAsleep;
+                        break;
+                }
             }
-            return 0;
-        }
-
-        static public int Day4Part2()
-        {
-            return 0;
+            return guards;
         }
 
         public enum InfoType
@@ -37,21 +89,13 @@ namespace Advent_2018
 
         public class Info : IComparable<Info>
         {
-            public int Year { get; set; }
-            public int Month { get; set; }
-            public int Day { get; set; }
-            public int Hours { get; set; }
-            public int Minutes { get; set; }
+            public DateTime Date { get; set; }
             public int GuardId { get; set; }
             public InfoType InfoType { get; set; }
 
             public Info(string s)
             {
-                Year = int.Parse(s.Substring(1, 4));
-                Month = int.Parse(s.Substring(6, 2));
-                Day = int.Parse(s.Substring(9, 2));
-                Hours = int.Parse(s.Substring(12, 2));
-                Minutes = int.Parse(s.Substring(15, 2));
+                Date = new DateTime(int.Parse(s.Substring(1, 4)), int.Parse(s.Substring(6, 2)), int.Parse(s.Substring(9, 2)), int.Parse(s.Substring(12, 2)), int.Parse(s.Substring(15, 2)), 0);
                 string type = s.Substring(19, 5);
                 if (type == "Guard")
                 {
@@ -66,16 +110,8 @@ namespace Advent_2018
 
             public int CompareTo(Info other)
             {
-                if (Year.CompareTo(other.Year) != 0)
-                    return Year.CompareTo(other.Year);
-                if (Month.CompareTo(other.Month) != 0)
-                    return Month.CompareTo(other.Month);
-                if (Day.CompareTo(other.Day) != 0)
-                    return Day.CompareTo(other.Day);
-                if (Hours.CompareTo(other.Hours) != 0)
-                    return Hours.CompareTo(other.Hours);
-                if (Minutes.CompareTo(other.Minutes) != 0)
-                    return Minutes.CompareTo(other.Minutes);
+                if (Date.CompareTo(other.Date) != 0)
+                    return Date.CompareTo(other.Date);
                 return 0;
             }
         }
