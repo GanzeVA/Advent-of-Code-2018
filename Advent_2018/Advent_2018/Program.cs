@@ -23,8 +23,10 @@ namespace Advent_2018
             //Console.WriteLine($"Day 4 - Part 2: {Day4.Day4Part2()}");
             //Console.WriteLine($"Day 5 - Part 1: {Day5.Day5Part1()}");
             //Console.WriteLine($"Day 5 - Part 2: {Day5.Day5Part2()}");
-            Console.WriteLine($"Day 6 - Part 1: {Day6.Day6Part1()}");
-            Console.WriteLine($"Day 6 - Part 2: {Day6.Day6Part2()}");
+            //Console.WriteLine($"Day 6 - Part 1: {Day6.Day6Part1()}");
+            //Console.WriteLine($"Day 6 - Part 2: {Day6.Day6Part2()}");
+            Console.WriteLine($"Day 7 - Part 1: {Day7.Day7Part1()}");
+            Console.WriteLine($"Day 7 - Part 2: {Day7.Day7Part2()}");
         }
     }
 }
